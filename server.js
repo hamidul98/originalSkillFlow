@@ -50,11 +50,14 @@ app.post('/api/auth/register', async (req, res) => {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: 'User already exists' });
 
+    // Auto-assign admin role for specific email
+    const isAdmin = email === 'hamidulhaquetitas@gmail.com';
+
     const newUser = new User({
       name,
       email,
       password,
-      role: role || 'user',
+      role: role || (isAdmin ? 'admin' : 'user'),
       joinedAt: new Date().toISOString()
     });
 
